@@ -10,3 +10,6 @@ def c(*args, **kwargs):
 def d(error=False, *args, **kwargs):
     if error:
         raise Exception("Error condition!")
+
+if __name__=="__main__":
+    a()
