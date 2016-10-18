@@ -11830,17 +11830,78 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Map-reduce-type-operations">Map-reduce type operations<a class="anchor-link" href="#Map-reduce-type-operations">&#182;</a></h1>
+<h1 id="Functional-programming-with-fewer-lambdas">Functional programming with fewer lambdas<a class="anchor-link" href="#Functional-programming-with-fewer-lambdas">&#182;</a></h1>
 </div>
 </div>
 </div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="map"><code>map</code><a class="anchor-link" href="#map">&#182;</a></h1>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[71]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">,</span> <span class="n">a</span><span class="p">))</span>
+<span class="n">b</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[2]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[1.0,
+ 2.7182818284590451,
+ 7.3890560989306504,
+ 20.085536923187668,
+ 54.598150033144236,
+ 148.4131591025766,
+ 403.42879349273511,
+ 1096.6331584284585,
+ 2980.9579870417283,
+ 8103.0839275753842]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Say we have some fictitious data and a complicated function to transform each one of the observations, which takes a lot of parameters. Since we can apply this function to each of the observations independently, we can <strong>map</strong> the function to the data, potentially in a parallel fashion.</p>
+<p>Map operations can be done with <code>map</code> in Python, though it's usually better to do it some other way.</p>
+
+</div>
+</div>
+</div>
+</aside></section></section><section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">h</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;flim&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;flam&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="n">e5</span> <span class="p">}</span>
 
 <span class="k">def</span> <span class="nf">complicated_function</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">flim</span><span class="p">,</span> <span class="n">flam</span><span class="p">,</span> <span class="n">foo</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">field</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">flim</span><span class="p">,</span> <span class="n">flam</span><span class="p">))</span> <span class="o">/</span> <span class="n">foo</span>
@@ -11850,18 +11911,30 @@ a.anchor-link {
 </div>
 </div>
 
-</div><div class="fragment">
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Naively <code>map</code>ping the function to the data doesn't work because it has the wrong number of parameters (i.e., it has the wrong arity).</p>
+
+</div>
+</div>
+</div>
+</aside><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[72]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># door 1</span>
-<span class="k">try</span><span class="p">:</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="n">new_data</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">complicated_function</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="c1"># doesn&#39;t work!</span>
     <span class="nb">list</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
-<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Oops! That didn&#39;t work.&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Oops! That didn&#39;t work:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 
 </div>
@@ -11874,7 +11947,8 @@ a.anchor-link {
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Oops! That didn&#39;t work.
+<pre>Oops! That didn&#39;t work:
+complicated_function() missing 5 required positional arguments: &#39;x&#39;, &#39;y&#39;, &#39;flim&#39;, &#39;flam&#39;, and &#39;foo&#39;
 </pre>
 </div>
 </div>
@@ -11882,14 +11956,47 @@ a.anchor-link {
 </div>
 </div>
 
-</div></div></section></section><section><section>
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Creating an anonymous function (a "lambda") to encapsulate the call is a popular option, with what many believe are significant readability problems.</p>
+
+</div>
+</div>
+</div>
+</aside></div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Ugly">Ugly<a class="anchor-link" href="#Ugly">&#182;</a></h4>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[73]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># door 2</span>
-<span class="n">new_data</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">complicated_function</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">h</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span> <span class="c1"># ugly!</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">settings</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;flim&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;flam&#39;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="n">e5</span> <span class="p">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_data</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> <span class="n">complicated_function</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span> 
 <span class="nb">list</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
 </pre></div>
 
@@ -11901,15 +12008,15 @@ a.anchor-link {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[73]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[6]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[0.011117855565115006,
- 0.011126473422785671,
- 0.011090272343825841,
- 0.011098345393296936,
- 0.011126237298225599]</pre>
+<pre>[0.011110338835955892,
+ 0.011110420525203427,
+ 0.011101023068607803,
+ 0.011111630074300927,
+ 0.011108426697075145]</pre>
 </div>
 
 </div>
@@ -11918,14 +12025,22 @@ a.anchor-link {
 </div>
 
 </div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Even-uglier">Even uglier<a class="anchor-link" href="#Even-uglier">&#182;</a></h4>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[74]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># door 3</span>
-<span class="n">does_the_right_thing</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">complicated_function</span><span class="p">,</span> <span class="o">**</span><span class="n">h</span><span class="p">)</span>
-<span class="n">new_data</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">does_the_right_thing</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="c1"># works and it&#39;s readable!</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_data</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span> 
+     <span class="n">complicated_function</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">flim</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">flam</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">foo</span><span class="o">=</span><span class="mi">1</span><span class="n">e5</span><span class="p">),</span> <span class="n">data</span><span class="p">)</span>
 <span class="nb">list</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
 </pre></div>
 
@@ -11937,15 +12052,15 @@ a.anchor-link {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[74]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[7]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[0.011117855565115006,
- 0.011126473422785671,
- 0.011090272343825841,
- 0.011098345393296936,
- 0.011126237298225599]</pre>
+<pre>[0.011110338835955892,
+ 0.011110420525203427,
+ 0.011101023068607803,
+ 0.011111630074300927,
+ 0.011108426697075145]</pre>
 </div>
 
 </div>
@@ -11959,13 +12074,82 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="operators-all-have-functional-equivalents">operators all have functional equivalents<a class="anchor-link" href="#operators-all-have-functional-equivalents">&#182;</a></h1>
+<h1 id="A-better-way">A better way<a class="anchor-link" href="#A-better-way">&#182;</a></h1>
 </div>
 </div>
-</div><div class="fragment">
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>If you need to "freeze" certain settings in place, <code>functools.partial</code> creates a new callable, here with only one argument:</p>
+
+</div>
+</div>
+</div>
+</aside>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[75]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># door 3</span>
+<span class="n">simple_function</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">complicated_function</span><span class="p">,</span> <span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+<span class="n">new_data</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">simple_function</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span> <span class="c1"># works and it&#39;s readable!</span>
+<span class="nb">list</span><span class="p">(</span><span class="n">new_data</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[8]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[0.011110338835955892,
+ 0.011110420525203427,
+ 0.011101023068607803,
+ 0.011111630074300927,
+ 0.011108426697075145]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Operators-all-have-named-functional-equivalents">Operators all have named functional equivalents<a class="anchor-link" href="#Operators-all-have-named-functional-equivalents">&#182;</a></h1>
+</div>
+</div>
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Some of the most common functions you need to pass to distributed systems are binary arithmetic operations. The <code>operator</code> library has a number of named functions for just this purpose.</p>
+
+</div>
+</div>
+</div>
+</aside><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">operator</span> <span class="k">import</span> <span class="n">add</span><span class="p">,</span> <span class="n">mul</span><span class="p">,</span> <span class="n">truediv</span><span class="p">,</span> <span class="n">floordiv</span>
@@ -11979,7 +12163,7 @@ a.anchor-link {
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[76]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
@@ -12006,7 +12190,7 @@ a.anchor-link {
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[77]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">reduce</span><span class="p">(</span><span class="n">mul</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]))</span>
@@ -12042,13 +12226,13 @@ a.anchor-link {
 </div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[78]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])))</span>
+<span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]))</span>
 </pre></div>
 
 </div>
@@ -12059,11 +12243,13 @@ a.anchor-link {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[1, 4, 9]
-</pre>
+<div class="output_area"><div class="prompt output_prompt">Out[12]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[4, 9, 16]</pre>
 </div>
+
 </div>
 
 </div>
@@ -12072,10 +12258,10 @@ a.anchor-link {
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[79]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]))</span>
 </pre></div>
 
 </div>
@@ -12086,11 +12272,13 @@ a.anchor-link {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt"></div>
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[1, 4, 9]
-</pre>
+<div class="output_area"><div class="prompt output_prompt">Out[13]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[4, 9, 16]</pre>
 </div>
+
 </div>
 
 </div>
@@ -12102,58 +12290,25 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Takeaways">Takeaways<a class="anchor-link" href="#Takeaways">&#182;</a></h1>
-</div>
-</div>
-</div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Lambdas-should-be-readable">Lambdas should be readable<a class="anchor-link" href="#Lambdas-should-be-readable">&#182;</a></h3><ul>
-<li>if they aren't, what to use instead?</li>
-</ul>
 
-</div>
-</div>
-</div></div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Use-partial-to-freeze-parts-of-a-function">Use partial to freeze parts of a function<a class="anchor-link" href="#Use-partial-to-freeze-parts-of-a-function">&#182;</a></h3>
-</div>
-</div>
-</div></div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Use-named-functions-(like-operator.mul)-whenever-possible">Use named functions (like operator.mul) whenever possible<a class="anchor-link" href="#Use-named-functions-(like-operator.mul)-whenever-possible">&#182;</a></h3>
-</div>
-</div>
-</div></div></section></section><section><section>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="DIY-NLP">DIY NLP<a class="anchor-link" href="#DIY-NLP">&#182;</a></h1>
 </div>
 </div>
 </div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="DIY-natural-language-processing">DIY natural language processing<a class="anchor-link" href="#DIY-natural-language-processing">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[80]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
-
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;t8.shakespeare.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;t8.shakespeare.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">shakes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="n">sample</span> <span class="o">=</span> <span class="n">shakes</span><span class="p">[</span><span class="mi">10300</span><span class="p">:</span><span class="mi">10500</span><span class="p">]</span>
 </pre></div>
@@ -12162,13 +12317,15 @@ a.anchor-link {
 </div>
 </div>
 
-</div><div class="fragment">
+</div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[81]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">txt</span><span class="p">):</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="n">txt</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">txt</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 <span class="k">def</span> <span class="nf">tokenize</span><span class="p">(</span><span class="n">txt</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">r&quot;&quot;&quot;(([;.!?,&#39;&quot;:]|--)+)&quot;&quot;&quot;</span><span class="p">,</span>
@@ -12181,9 +12338,18 @@ a.anchor-link {
 </div>
 
 </div></div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Tokenization">Tokenization<a class="anchor-link" href="#Tokenization">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[82]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
@@ -12211,10 +12377,10 @@ a.anchor-link {
 </div>
 </div>
 
-</div><div class="fragment">
+</div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[83]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span>
@@ -12245,7 +12411,7 @@ a.anchor-link {
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[84]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">sample</span><span class="p">)))</span>
@@ -12276,7 +12442,7 @@ a.anchor-link {
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[85]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">normalize</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">()[:</span><span class="mi">20</span><span class="p">])</span>
@@ -12313,7 +12479,7 @@ a.anchor-link {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[86]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_tokens</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">shakes</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
@@ -12329,17 +12495,20 @@ a.anchor-link {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Fast vocabulary extraction:</p>
+<h1 id="collections.Counter"><code>collections.Counter</code><a class="anchor-link" href="#collections.Counter">&#182;</a></h1><p>Fast vocabulary extraction:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[87]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">vocabulary</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">Counter</span><span class="p">(</span><span class="n">all_tokens</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5050</span><span class="p">)[</span><span class="mi">50</span><span class="p">:]]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">Counter</span>
+
+<span class="n">vocabulary</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">Counter</span><span class="p">(</span><span class="n">all_tokens</span><span class="p">)</span><span class="o">.</span><span class="n">most_common</span><span class="p">(</span><span class="mi">5050</span><span class="p">)[</span><span class="mi">50</span><span class="p">:]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Most common words:&quot;</span><span class="p">)</span>
 <span class="n">vocabulary</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 
@@ -12351,7 +12520,14 @@ a.anchor-link {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[87]:</div>
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Most common words:
+</pre>
+</div>
+</div>
+
+<div class="output_area"><div class="prompt output_prompt">Out[21]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12366,10 +12542,11 @@ a.anchor-link {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[88]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">vocabulary</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Least common:&quot;</span><span class="p">)</span>
+<span class="n">vocabulary</span><span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">:]</span>
 </pre></div>
 
 </div>
@@ -12380,20 +12557,27 @@ a.anchor-link {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[88]:</div>
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Least common:
+</pre>
+</div>
+</div>
+
+<div class="output_area"><div class="prompt output_prompt">Out[22]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;say-&#39;,
- &#39;froward&#39;,
- &#39;veil&#39;,
- &#39;conspirators&#39;,
- &#39;weaker&#39;,
- &#39;preferr&#39;,
- &#39;whispers&#39;,
- &#39;its&#39;,
- &#39;jerusalem&#39;,
- &#39;dissemble&#39;]</pre>
+<pre>[&#39;son-&#39;,
+ &#39;favor&#39;,
+ &#39;proudly&#39;,
+ &#39;glories&#39;,
+ &#39;birnam&#39;,
+ &#39;folks&#39;,
+ &#39;britons&#39;,
+ &#39;inches&#39;,
+ &#39;pupil&#39;,
+ &#39;ending&#39;]</pre>
 </div>
 
 </div>
@@ -12401,43 +12585,10 @@ a.anchor-link {
 </div>
 </div>
 
-</div><div class="fragment">
+</div></section></section><section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[89]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;richardiiii.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">richard3</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;hamlet.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">hamlet</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;asyoulikeit.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="n">asyoulikeit</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div></div><div class="fragment">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[90]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">richard3_tokens</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">richard3</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-<span class="n">hamlet_tokens</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">hamlet</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-<span class="n">asyoulikeit_tokens</span> <span class="o">=</span> <span class="n">normalize</span><span class="p">(</span><span class="n">tokenize</span><span class="p">(</span><span class="n">asyoulikeit</span><span class="p">))</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div></div></section></section><section><section>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[91]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">bow</span><span class="p">(</span><span class="n">tokens</span><span class="p">,</span> <span class="n">vocabulary</span><span class="p">):</span>
@@ -12456,7 +12607,7 @@ a.anchor-link {
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[91]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[25]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12468,10 +12619,10 @@ a.anchor-link {
 </div>
 </div>
 
-</div>
+</div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[93]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -12493,8 +12644,8 @@ a.anchor-link {
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Hamlet vs. As You Like It:  0.499966873206
-Hamlet vs. Richard III:  0.623168364997
+<pre>Hamlet vs. As You Like It:  0.499961805901
+Hamlet vs. Richard III:  0.623157590376
 </pre>
 </div>
 </div>
@@ -12502,10 +12653,10 @@ Hamlet vs. Richard III:  0.623168364997
 </div>
 </div>
 
-</div><div class="fragment">
+</div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[94]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;As You Like It vs. Richard III: &quot;</span><span class="p">,</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">asyoulikeit_bow</span><span class="p">,</span> <span class="n">richard3_bow</span><span class="p">))</span>
@@ -12521,7 +12672,7 @@ Hamlet vs. Richard III:  0.623168364997
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>As You Like It vs. Richard III:  0.586101120429
+<pre>As You Like It vs. Richard III:  0.586104685068
 </pre>
 </div>
 </div>
@@ -12529,25 +12680,169 @@ Hamlet vs. Richard III:  0.623168364997
 </div>
 </div>
 
+</div><aside class="notes">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Binary BOW digression </span>
+<span class="n">hamlet_bow</span> <span class="o">=</span> <span class="p">(</span><span class="n">hamlet_bow</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">asyoulikeit_bow</span> <span class="o">=</span> <span class="p">(</span><span class="n">asyoulikeit_bow</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">richard3_bow</span> <span class="o">=</span> <span class="p">(</span><span class="n">richard3_bow</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hamlet vs. As You Like It: &quot;</span><span class="p">,</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">hamlet_bow</span><span class="p">,</span> <span class="n">asyoulikeit_bow</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hamlet vs. Richard III: &quot;</span><span class="p">,</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">hamlet_bow</span><span class="p">,</span> <span class="n">richard3_bow</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;As You Like It vs. Richard III: &quot;</span><span class="p">,</span> <span class="n">cosine_similarity</span><span class="p">(</span><span class="n">asyoulikeit_bow</span><span class="p">,</span> <span class="n">richard3_bow</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Hamlet vs. As You Like It:  0.642760985573
+Hamlet vs. Richard III:  0.656169857146
+As You Like It vs. Richard III:  0.632834763221
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+</aside></div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Persistence">Persistence<a class="anchor-link" href="#Persistence">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="pickle...-right?"><code>pickle</code>... right?<a class="anchor-link" href="#pickle...-right?">&#182;</a></h2>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">shelve</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div></div></section></section><section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="n">shelve</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;shakespeare&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">f</span><span class="p">[</span><span class="s1">&#39;richard iii&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">richard3</span>
+    <span class="n">f</span><span class="p">[</span><span class="s1">&#39;hamlet&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hamlet</span>
+    <span class="n">f</span><span class="p">[</span><span class="s1">&#39;as you like it&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">asyoulikeit</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="n">shelve</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;shakespeare&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="s1">&#39;hamlet&#39;</span><span class="p">][</span><span class="mi">5100</span><span class="p">:</span><span class="mi">5200</span><span class="p">])</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>  Dar&#39;d to the combat; in which our valiant Hamlet
+    (For so this side of our known world esteem&#39;d
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="cf.-h5py-for-storing-data,-redis-py-etc.-for-other-key-value-store-interfaces">cf. <code>h5py</code> for storing data, <code>redis-py</code> etc. for other key-value store interfaces<a class="anchor-link" href="#cf.-h5py-for-storing-data,-redis-py-etc.-for-other-key-value-store-interfaces">&#182;</a></h3>
+</div>
+</div>
 </div></div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Mini-batching!">Mini-batching!<a class="anchor-link" href="#Mini-batching!">&#182;</a></h1>
+<h1 id="Mini-batching">Mini-batching<a class="anchor-link" href="#Mini-batching">&#182;</a></h1>
+</div>
+</div>
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Another common task is taking a large number of observations and parceling them out a certain bit at a time, for example in order to maximally exploit limited GPU memory.</p>
+
+</div>
+</div>
+</div>
+</aside></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="itertools.islice"><code>itertools.islice</code><a class="anchor-link" href="#itertools.islice">&#182;</a></h1>
 </div>
 </div>
 </div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[95]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">islice</span>
 
 <span class="n">shakespeare_lines</span> <span class="o">=</span> <span class="n">shakes</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">shakespeare_lines</span><span class="p">)</span>
+<span class="n">minibatch_size</span> <span class="o">=</span> <span class="mi">5</span>
 </pre></div>
 
 </div>
@@ -12560,27 +12855,13 @@ Hamlet vs. Richard III:  0.623168364997
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>How to get Shakespeare lines five at a time?</p>
-
+<h1 id="itertools.islice"><code>itertools.islice</code><a class="anchor-link" href="#itertools.islice">&#182;</a></h1>
 </div>
 </div>
 </div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[96]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">minibatch_size</span> <span class="o">=</span> <span class="mi">5</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div></div></section></section><section><section>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[97]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">islice</span><span class="p">(</span><span class="n">shakespeare_lines</span><span class="p">,</span> <span class="n">minibatch_size</span><span class="p">)</span>
@@ -12594,44 +12875,11 @@ Hamlet vs. Richard III:  0.623168364997
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[97]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[34]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;itertools.islice at 0x10f048368&gt;</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div><div class="fragment">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[98]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">shakespeare_lines</span><span class="p">,</span> <span class="n">minibatch_size</span><span class="p">))</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[98]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;    Dare he presume to scorn us in this manner?&#39;,
- &#34;    Were both extermin&#39;d.&#34;,
- &#39;  ANTONY. Fulvia is dead.&#39;,
- &#39;     To match you where I hate; therefore beseech you&#39;,
- &#34;  Come, go with us; we&#39;ll look to that anon.&#34;]</pre>
+<pre>&lt;itertools.islice at 0x10a74bbd8&gt;</pre>
 </div>
 
 </div>
@@ -12642,7 +12890,7 @@ Hamlet vs. Richard III:  0.623168364997
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[99]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">shakespeare_lines</span><span class="p">,</span> <span class="n">minibatch_size</span><span class="p">))</span>
@@ -12656,15 +12904,48 @@ Hamlet vs. Richard III:  0.623168364997
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[99]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[35]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;    Dare he presume to scorn us in this manner?&#39;,
- &#34;    Were both extermin&#39;d.&#34;,
- &#39;  ANTONY. Fulvia is dead.&#39;,
- &#39;     To match you where I hate; therefore beseech you&#39;,
- &#34;  Come, go with us; we&#39;ll look to that anon.&#34;]</pre>
+<pre>[&#39;    Yoke-fellow to his honour-owing wounds,&#39;,
+ &#39;    of hair; they call themselves Saltiers, and they have dance which&#39;,
+ &#34;    I do retort the &#39;solus&#39; in thy bowels;&#34;,
+ &#34;    Have left me issueless; and your father&#39;s blest,&#34;,
+ &#39;&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">shakespeare_lines</span><span class="p">,</span> <span class="n">minibatch_size</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[36]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;    Yoke-fellow to his honour-owing wounds,&#39;,
+ &#39;    of hair; they call themselves Saltiers, and they have dance which&#39;,
+ &#34;    I do retort the &#39;solus&#39; in thy bowels;&#34;,
+ &#34;    Have left me issueless; and your father&#39;s blest,&#34;,
+ &#39;&#39;]</pre>
 </div>
 
 </div>
@@ -12678,14 +12959,14 @@ Hamlet vs. Richard III:  0.623168364997
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Why always the same?</p>
+<p>Pop quiz</p>
 
 </div>
 </div>
 </div></div></section></section><section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[100]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">lines_iter</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">shakespeare_lines</span><span class="p">)</span>
@@ -12707,7 +12988,7 @@ Hamlet vs. Richard III:  0.623168364997
 </div></div></section></section><section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[101]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">lines_iter</span><span class="p">,</span> <span class="n">minibatch_size</span><span class="p">))</span>
@@ -12721,15 +13002,15 @@ Hamlet vs. Richard III:  0.623168364997
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[101]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[38]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;    Dare he presume to scorn us in this manner?&#39;,
- &#34;    Were both extermin&#39;d.&#34;,
- &#39;  ANTONY. Fulvia is dead.&#39;,
- &#39;     To match you where I hate; therefore beseech you&#39;,
- &#34;  Come, go with us; we&#39;ll look to that anon.&#34;]</pre>
+<pre>[&#39;    Yoke-fellow to his honour-owing wounds,&#39;,
+ &#39;    of hair; they call themselves Saltiers, and they have dance which&#39;,
+ &#34;    I do retort the &#39;solus&#39; in thy bowels;&#34;,
+ &#34;    Have left me issueless; and your father&#39;s blest,&#34;,
+ &#39;&#39;]</pre>
 </div>
 
 </div>
@@ -12740,7 +13021,7 @@ Hamlet vs. Richard III:  0.623168364997
 </div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[102]:</div>
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">lines_iter</span><span class="p">,</span> <span class="n">minibatch_size</span><span class="p">))</span>
@@ -12754,15 +13035,15 @@ Hamlet vs. Richard III:  0.623168364997
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[102]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[39]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#34;    Thou gav&#39;st me thine not to give back again.&#34;,
- &#34;  POMPEY. We&#39;ll feast each other ere we part, and let&#39;s&#34;,
- &#34;  CLOWN. I would you had been by the ship-side, to have help&#39;d her;&#34;,
- &#39;  TIMON. Mine honest friend,&#39;,
- &#39;  The Ghost of Banquo and other Apparitions&#39;]</pre>
+<pre>[&#39;  PETRUCHIO. Nay, I will win my wager better yet,&#39;,
+ &#39;&#39;,
+ &#39;    That whiles Verona by that name is known,&#39;,
+ &#39;    Farewell, my blood; which if to-day thou shed,&#39;,
+ &#39;  IAGO.                Should you do so, my lord,&#39;]</pre>
 </div>
 
 </div>
@@ -12773,7 +13054,7 @@ Hamlet vs. Richard III:  0.623168364997
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[103]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">list</span><span class="p">(</span><span class="n">islice</span><span class="p">(</span><span class="n">lines_iter</span><span class="p">,</span> <span class="n">minibatch_size</span><span class="p">))</span>
@@ -12787,15 +13068,15 @@ Hamlet vs. Richard III:  0.623168364997
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[103]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[40]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;    The lustre in your eye, heaven in your cheek,&#39;,
- &#39;    Will live as maids and widows. Come, away;&#39;,
- &#39;    And his achievements of no less account.&#39;,
- &#34;    Till that the conquering wine hath steep&#39;d our sense&#34;,
- &#39;    hanging of the thieves and so become a rare hangman.&#39;]</pre>
+<pre>[&#39;  IMOGEN. But that you shall not say I yield, being silent,&#39;,
+ &#34;    Take each man&#39;s censure, but reserve thy judgment.&#34;,
+ &#39;    I will not taint my mouth with.&#39;,
+ &#39;  Bene. Gallants, I am not as I have been.&#39;,
+ &#39;  Then gentle cheater urge not my amiss,&#39;]</pre>
 </div>
 
 </div>
@@ -12809,7 +13090,7 @@ Hamlet vs. Richard III:  0.623168364997
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="So...">So...<a class="anchor-link" href="#So...">&#182;</a></h2><h3 id="If-you-have-an-iterator-over-individual-examples,-you-have-mini-batching-in-one-line">If you have an iterator over individual examples, you have mini-batching in one line<a class="anchor-link" href="#If-you-have-an-iterator-over-individual-examples,-you-have-mini-batching-in-one-line">&#182;</a></h3>
+<h2 id="So...">So...<a class="anchor-link" href="#So...">&#182;</a></h2><h3 id="If-you-have-an-iterator-over-individual-examples,-you-have-basic-mini-batching-in-one-line">If you have an iterator over individual examples, you have basic mini-batching in one line<a class="anchor-link" href="#If-you-have-an-iterator-over-individual-examples,-you-have-basic-mini-batching-in-one-line">&#182;</a></h3>
 </div>
 </div>
 </div><div class="fragment">
@@ -12821,24 +13102,61 @@ Hamlet vs. Richard III:  0.623168364997
 <h3 id="Even-if-they-are-out-of-core,-infinite,-being-hand-entered-in-real-time-by-an-army-of-rats...">Even if they are out-of-core, infinite, being hand-entered in real time by an army of rats...<a class="anchor-link" href="#Even-if-they-are-out-of-core,-infinite,-being-hand-entered-in-real-time-by-an-army-of-rats...">&#182;</a></h3>
 </div>
 </div>
-</div></div></section></section><section><section>
+</div><aside class="notes">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">class</span> <span class="nc">MinibatchIterator</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span>
+    
+    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">islice</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+</aside></div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="I-Except">I Except<a class="anchor-link" href="#I-Except">&#182;</a></h1><h2 id="Erring-out-your-grievances">Erring out your grievances<a class="anchor-link" href="#Erring-out-your-grievances">&#182;</a></h2>
+
+</div>
+</div>
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="When-something-doesn't-work">When something doesn't work<a class="anchor-link" href="#When-something-doesn't-work">&#182;</a></h1><h2 id="(Or,-Erring-out-your-grievances)">(Or, Erring out your grievances)<a class="anchor-link" href="#(Or,-Erring-out-your-grievances)">&#182;</a></h2>
 </div>
 </div>
 </div></section></section><section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[105]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
 <span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">logging</span><span class="p">)</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;(Root Logger) </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="c1">#logging.getLogger().handlers = []</span>
+<span class="c1">#logging.getLogger().addHandler(logging.StreamHandler())</span>
+<span class="c1">#logging.getLogger().handlers[0].setFormatter(</span>
+<span class="c1">#    logging.Formatter(&#39;(Root Logger) %(levelname)s - %(message)s&#39;))</span>
 <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;PROBLEM&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PROBLEM&quot;</span><span class="p">)</span>
 </pre></div>
@@ -12853,7 +13171,7 @@ Hamlet vs. Richard III:  0.623168364997
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>DEBUG:root:PROBLEM
+<pre>(Root Logger) DEBUG - PROBLEM
 </pre>
 </div>
 </div>
@@ -12868,7 +13186,7 @@ Hamlet vs. Richard III:  0.623168364997
 </div>
 </div>
 
-</div>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
@@ -12877,10 +13195,102 @@ Hamlet vs. Richard III:  0.623168364997
 <h2 id="Why-not-print?">Why not print?<a class="anchor-link" href="#Why-not-print?">&#182;</a></h2>
 </div>
 </div>
-</div></section></section><section><section>
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>A logger's <strong>level</strong> affects which messages it handles:</p>
+
+</div>
+</div>
+</div>
+</aside></div></section></section><section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[106]:</div>
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Logging level: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">level</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="c1"># Set level of root logger</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;3&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;4&quot;</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;5&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>Logging level: 10
+
+(Root Logger) DEBUG - 1
+(Root Logger) INFO - 2
+(Root Logger) WARNING - 3
+(Root Logger) ERROR - 4
+(Root Logger) CRITICAL - 5
+
+
+Logging level: 20
+
+(Root Logger) INFO - 2
+(Root Logger) WARNING - 3
+(Root Logger) ERROR - 4
+(Root Logger) CRITICAL - 5
+
+
+Logging level: 30
+
+(Root Logger) WARNING - 3
+(Root Logger) ERROR - 4
+(Root Logger) CRITICAL - 5
+
+
+Logging level: 40
+
+(Root Logger) ERROR - 4
+(Root Logger) CRITICAL - 5
+
+
+Logging level: 50
+
+(Root Logger) CRITICAL - 5
+
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Handlers-and-Formatters">Handlers and Formatters<a class="anchor-link" href="#Handlers-and-Formatters">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;main_logger&quot;</span><span class="p">)</span>
@@ -12890,8 +13300,19 @@ Hamlet vs. Richard III:  0.623168364997
 <span class="n">console</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">))</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">console</span><span class="p">)</span>
+</pre></div>
 
-<span class="k">try</span><span class="p">:</span>
+</div>
+</div>
+</div>
+
+</div></div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">try</span><span class="p">:</span>
     <span class="mi">1</span><span class="o">/</span><span class="mi">0</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Barf&quot;</span><span class="p">)</span>
@@ -12907,8 +13328,8 @@ Hamlet vs. Richard III:  0.623168364997
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2016-10-14 18:30:58,852 - main_logger - DEBUG - Barf
-DEBUG:main_logger:Barf
+<pre>2016-10-17 17:12:15,425 - main_logger - DEBUG - Barf
+(Root Logger) DEBUG - Barf
 </pre>
 </div>
 </div>
@@ -12916,10 +13337,28 @@ DEBUG:main_logger:Barf
 </div>
 </div>
 
-</div></section></section><section><section>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Levels-belong-to-Handlers">Levels belong to Handlers<a class="anchor-link" href="#Levels-belong-to-Handlers">&#182;</a></h3>
+</div>
+</div>
+</div></div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Ancestors-and-Children">Ancestors and Children<a class="anchor-link" href="#Ancestors-and-Children">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[107]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;main_logger.new_logger&quot;</span><span class="p">)</span>
@@ -12929,10 +13368,10 @@ DEBUG:main_logger:Barf
 </div>
 </div>
 
-</div><div class="fragment">
+</div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[109]:</div>
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">logger</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
@@ -12961,7 +13400,7 @@ main_logger.new_logger
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[110]:</div>
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">logger</span><span class="o">.</span><span class="n">getChild</span><span class="p">(</span><span class="s2">&quot;new_logger&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="n">new_logger</span>
@@ -12975,7 +13414,7 @@ main_logger.new_logger
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[110]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[51]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -12987,10 +13426,19 @@ main_logger.new_logger
 </div>
 </div>
 
-</div></div><div class="fragment">
+</div></div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Propagation">Propagation<a class="anchor-link" href="#Propagation">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[111]:</div>
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_console</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
@@ -13007,11 +13455,10 @@ main_logger.new_logger
 </div></div><div class="fragment">
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[112]:</div>
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Barf&quot;</span><span class="p">)</span>
-<span class="n">new_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Useful message&quot;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -13024,11 +13471,37 @@ main_logger.new_logger
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2016-10-14 18:30:58,929 - main_logger.new_logger - DEBUG - Barf
-DEBUG:main_logger.new_logger:Barf
-2016-10-14 18:30:58,936 - main_logger.new_logger - INFO - *** Useful message ***
-2016-10-14 18:30:58,936 - main_logger.new_logger - INFO - Useful message
-INFO:main_logger.new_logger:Useful message
+<pre>2016-10-17 17:12:15,475 - main_logger.new_logger - DEBUG - Barf
+(Root Logger) DEBUG - Barf
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Useful message&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2016-10-17 17:12:15,495 - main_logger.new_logger - INFO - *** Useful message ***
+2016-10-17 17:12:15,495 - main_logger.new_logger - INFO - Useful message
+(Root Logger) INFO - Useful message
 </pre>
 </div>
 </div>
@@ -13039,12 +13512,36 @@ INFO:main_logger.new_logger:Useful message
 </div></div></section></section><section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[113]:</div>
+<div class="prompt input_prompt">In&nbsp;[55]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_logger</span><span class="o">.</span><span class="n">propagate</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="n">new_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Barf&quot;</span><span class="p">)</span>
-<span class="n">new_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Useful message&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Barf&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div></div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">new_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Useful message&quot;</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -13057,11 +13554,280 @@ INFO:main_logger.new_logger:Useful message
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2016-10-14 18:30:58,946 - main_logger.new_logger - INFO - *** Useful message ***
+<pre>2016-10-17 17:12:15,514 - main_logger.new_logger - INFO - *** Useful message ***
 </pre>
 </div>
 </div>
 
+</div>
+</div>
+
+</div></div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Other-handlers">Other handlers<a class="anchor-link" href="#Other-handlers">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[59]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> / </span><span class="si">%(name)s</span><span class="s1"> / </span><span class="si">%(levelname)s</span><span class="s1">:  </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">file_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s2">&quot;log.txt&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+<span class="n">file_handler</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+<span class="n">file_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;file_logger&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">file_handler</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div></div></section></section><section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;This won&#39;t show up&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;FYI&quot;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;This is an error&quot;</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>(Root Logger) DEBUG - This won&#39;t show up
+(Root Logger) INFO - FYI
+(Root Logger) WARNING - This is an error
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[61]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;log.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">log</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>2016-10-17 17:12:15,550 / file_logger / INFO:  FYI
+2016-10-17 17:12:15,551 / file_logger / WARNING:  This is an error
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div></div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Logstash-handlers">Logstash handlers<a class="anchor-link" href="#Logstash-handlers">&#182;</a></h2><h3 id="3rd-party-library:">3rd-party library:<a class="anchor-link" href="#3rd-party-library:">&#182;</a></h3><p><code>pip install python-logstash</code></p>
+<h3 id="Python:">Python:<a class="anchor-link" href="#Python:">&#182;</a></h3><p><code>import logstash
+logger.addHandler(logstash.LogstashHandler(host, port, version=1))</code></p>
+
+</div>
+</div>
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Inheritance-and-naming">Inheritance and naming<a class="anchor-link" href="#Inheritance-and-naming">&#182;</a></h1>
+</div>
+</div>
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">importlib</span>
+<span class="kn">import</span> <span class="nn">pdb</span>
+<span class="kn">import</span> <span class="nn">raise_error</span>
+<span class="n">importlib</span><span class="o">.</span><span class="n">reload</span><span class="p">(</span><span class="n">raise_error</span><span class="p">)</span>
+<span class="n">raise_error</span><span class="o">.</span><span class="n">a</span><span class="p">()</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">Exception</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-62-b1f7b8711219&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span><span class="ansi-blue-fg">()</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> <span class="ansi-green-fg">import</span> raise_error
+<span class="ansi-green-intense-fg ansi-bold">      4</span> importlib<span class="ansi-blue-fg">.</span>reload<span class="ansi-blue-fg">(</span>raise_error<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg"> </span>raise_error<span class="ansi-blue-fg">.</span>a<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/Users/patrickc/src/lunch_standard/raise_error.py</span> in <span class="ansi-cyan-fg">a</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-green-fg">def</span> a<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg">     </span>b<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">,</span> error<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">True</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> 
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">def</span> b<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">      5</span>     c<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">/Users/patrickc/src/lunch_standard/raise_error.py</span> in <span class="ansi-cyan-fg">b</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> 
+<span class="ansi-green-intense-fg ansi-bold">      4</span> <span class="ansi-green-fg">def</span> b<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">----&gt; 5</span><span class="ansi-red-fg">     </span>c<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> 
+<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-green-fg">def</span> c<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/Users/patrickc/src/lunch_standard/raise_error.py</span> in <span class="ansi-cyan-fg">c</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">      6</span> 
+<span class="ansi-green-intense-fg ansi-bold">      7</span> <span class="ansi-green-fg">def</span> c<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">----&gt; 8</span><span class="ansi-red-fg">     </span>d<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      9</span> 
+<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-green-fg">def</span> d<span class="ansi-blue-fg">(</span>error<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">/Users/patrickc/src/lunch_standard/raise_error.py</span> in <span class="ansi-cyan-fg">d</span><span class="ansi-blue-fg">(error, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">     10</span> <span class="ansi-green-fg">def</span> d<span class="ansi-blue-fg">(</span>error<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">False</span><span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     11</span>     <span class="ansi-green-fg">if</span> error<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">---&gt; 12</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> Exception<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;Error condition!&#34;</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-red-fg">Exception</span>: Error condition!</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>pdb.pm()
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+</div>
 </div>
 </div>
 
